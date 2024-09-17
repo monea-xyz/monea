@@ -1,0 +1,7 @@
+optimism_package:
+  participants:
+    - el_type: op-reth
+  additional_services:
+    - blockscout
+  op_contract_deployer_params:
+    image: ethpandaops/optimism-contract-deployer:develop
