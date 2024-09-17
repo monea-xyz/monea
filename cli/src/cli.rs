@@ -1,4 +1,4 @@
-use crate::commands::InitArgs;
+use crate::commands::{InitArgs, RunArgs};
 use clap::{Parser, Subcommand};
 
 #[derive(Parser, Debug)]
@@ -14,11 +14,10 @@ pub struct Cli {
 pub enum Commands {
     #[clap(name = "init", about = "Initialize a new Monea repo")]
     Init(InitArgs),
+
     #[clap(name = "run", about = "Spin up a local development environment")]
-    Run {
-        #[arg()]
-        project_path: Option<String>,
-    },
+    Run(RunArgs),
+
     #[clap(name = "stop", about = "Stop the project")]
     Stop {
         #[arg(long, default_value = "false")]

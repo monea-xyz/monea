@@ -1,5 +1,4 @@
 use clap::Args;
-
 use std::error::Error;
 use std::fs;
 use std::io::Write;

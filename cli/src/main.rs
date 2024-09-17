@@ -1,6 +1,6 @@
 mod cli;
 mod commands;
-
+mod utils;
 use clap::Parser;
 
 fn main() {
@@ -13,11 +13,11 @@ fn main() {
                 std::process::exit(1);
             }
         }
-        Some(cli::Commands::Run { project_path }) => {
-            println!(
-                "Run command not implemented yet. Project path: {:?}",
-                project_path
-            );
+        Some(cli::Commands::Run(args)) => {
+            if let Err(e) = commands::run::run(args) {
+                eprintln!("Error: {}", e);
+                std::process::exit(1);
+            }
         }
         Some(cli::Commands::Stop { full }) => {
             println!("Stop command not implemented yet. Full stop: {}", full);
