@@ -3,6 +3,7 @@ use std::error::Error;
 use std::fs;
 use std::io::Write;
 use std::path::Path;
+use std::process::Command;
 
 #[derive(Args, Debug)]
 pub struct InitArgs {
@@ -44,6 +45,8 @@ pub fn init(args: InitArgs) -> Result<(), Box<dyn Error>> {
     } else if !project_path.exists() {
         fs::create_dir_all(project_path)?;
         create_project_files(project_path, &monea_config_content)?;
+        // Initialize Git repository
+        init_git_repo(project_path)?;
     } else {
         return Err(format!(
             "'{}' already exists and is not a directory",
@@ -66,10 +69,6 @@ fn create_project_files(
             "README.md",
             "# My Monea Project\n\nWelcome to your new Monea project!",
         ),
-        (
-            "main.rs",
-            "fn main() {\n    println!(\"Hello, Monea!\");\n}",
-        ),
         ("monea.config.json", monea_config_content),
     ];
 
@@ -84,5 +83,15 @@ fn create_file(project_path: &Path, file_name: &str, content: &str) -> Result<()
     let file_path = project_path.join(file_name);
     let mut file = fs::File::create(file_path)?;
     file.write_all(content.as_bytes())?;
+    Ok(())
+}
+
+fn init_git_repo(project_path: &Path) -> Result<(), Box<dyn Error>> {
+    Command::new("git")
+        .arg("init")
+        .current_dir(project_path)
+        .output()
+        .map_err(|e| format!("Failed to initialize Git repository: {}", e))?;
+    println!("Initialized Git repository");
     Ok(())
 }
