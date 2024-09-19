@@ -26,7 +26,11 @@ pub fn run(args: RunArgs) -> Result<(), Box<dyn Error>> {
     let chain_services = vec![
         (
             "ethereum-l1",
-            vec!["cl-1-lighthouse-geth", "el-1-geth-lighthouse"],
+            vec![
+                "cl-1-lighthouse-geth",
+                "el-1-geth-lighthouse",
+                "vc-1-geth-lighthouse",
+            ],
         ),
         ("optimism-l2", vec!["op-node", "op-geth"]),
     ];

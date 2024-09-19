@@ -19,8 +19,11 @@ fn main() {
                 std::process::exit(1);
             }
         }
-        Some(cli::Commands::Stop { full }) => {
-            println!("Stop command not implemented yet. Full stop: {}", full);
+        Some(cli::Commands::Stop(args)) => {
+            if let Err(e) = commands::stop::stop(args) {
+                eprintln!("Error: {}", e);
+                std::process::exit(1);
+            }
         }
         None => {
             println!("No command provided. Use --help for usage information.");

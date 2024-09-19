@@ -14,6 +14,7 @@ regex = "1.10.6"
 serde_yaml = "0.9.34"
 dirs = "5.0.1"
 dotenv = "0.15.0"
+pathdiff = "0.2.1"
 
 [build-dependencies]
 reqwest = { version = "0.11", features = ["json", "blocking"] }

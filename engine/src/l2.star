@@ -41,8 +41,9 @@ def launch_l2(
     )
 
     plan.print("Deploying L2 with name {0}".format(network_params.name))
+
     jwt_file = plan.upload_files(
-        src=static_files.JWT_PATH_FILEPATH,
+        src="../static_files/jwt/jwtsecret",
         name="op_jwt_file{0}".format(l2_services_suffix),
     )
 

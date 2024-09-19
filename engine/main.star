@@ -45,10 +45,10 @@ def run(plan, args):
         optimism_args_with_right_defaults.op_contract_deployer_params.image
     )
 
-    # Deploy Create2 Factory contract (only need to do this once for multiple l2s)
-    contract_deployer.deploy_factory_contract(
-        plan, l1_priv_key, l1_config_env_vars, l2_contract_deployer_image
-    )
+    # # Deploy Create2 Factory contract (only need to do this once for multiple l2s)
+    # contract_deployer.deploy_factory_contract(
+    #     plan, l1_priv_key, l1_config_env_vars, l2_contract_deployer_image
+    # )
     
     # # Deploy L2s
     # plan.print("Deploying a local L2")
@@ -117,3 +117,12 @@ def get_l1_config(all_l1_participants, l1_network_params, l1_network_id):
     )
 
     return env_vars
+
+def modify_services(plan, args):
+    plan.print("Stopping services")
+    # optimism_args = args.get("optimism_package", {})
+    # services_to_stop = args.get("services_to_stop", {})
+    # plan.print(services_to_stop)
+    # for service_name in services_to_stop:
+    #     plan.stop_service(service_name)
+        # plan.print(f"Stopped service: {service_name}")

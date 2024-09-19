@@ -1,4 +1,4 @@
-use crate::commands::{InitArgs, RunArgs};
+use crate::commands::{InitArgs, RunArgs, StopArgs};
 use clap::{Parser, Subcommand};
 
 #[derive(Parser, Debug)]
@@ -19,8 +19,5 @@ pub enum Commands {
     Run(RunArgs),
 
     #[clap(name = "stop", about = "Stop the project")]
-    Stop {
-        #[arg(long, default_value = "false")]
-        full: bool,
-    },
+    Stop(StopArgs),
 }

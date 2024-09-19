@@ -78,6 +78,7 @@ def deploy_l2_contracts(
         ],
         run=" && ".join(
             [
+                "set -x",  # Enable verbose mode
                 "./packages/contracts-bedrock/scripts/getting-started/wallets.sh >> {0}".format(
                     ENVRC_PATH
                 ),
@@ -85,16 +86,22 @@ def deploy_l2_contracts(
                     ENVRC_PATH
                 ),
                 ". {0}".format(ENVRC_PATH),
-                "mkdir -p /network-configs",
+                "mkdir network-configs",
                 "cast send $GS_ADMIN_ADDRESS --value $FUND_VALUE --private-key $PRIVATE_KEY --rpc-url $L1_RPC_URL",  # Fund Admin
                 "cast send $GS_BATCHER_ADDRESS --value $FUND_VALUE --private-key $PRIVATE_KEY --rpc-url $L1_RPC_URL",  # Fund Batcher
                 "cast send $GS_PROPOSER_ADDRESS --value $FUND_VALUE --private-key $PRIVATE_KEY --rpc-url $L1_RPC_URL",  # Fund Proposer
+
                 "cd /workspace/optimism/packages/contracts-bedrock",
                 "./scripts/getting-started/config.sh",
+                "ls -la /workspace/optimism/packages/contracts-bedrock/deploy-config/",
+
                 'jq \'. + {"fundDevAccounts": true, "useInterop": true}\' $DEPLOY_CONFIG_PATH > tmp.$$.json && mv tmp.$$.json $DEPLOY_CONFIG_PATH',
-                "forge script scripts/deploy/Deploy.s.sol:Deploy --private-key $GS_ADMIN_PRIVATE_KEY --broadcast --rpc-url $L1_RPC_URL",
+                "forge script scripts/Deploy.s.sol:Deploy --private-key $GS_ADMIN_PRIVATE_KEY --broadcast --rpc-url $L1_RPC_URL",
                 "CONTRACT_ADDRESSES_PATH=$DEPLOYMENT_OUTFILE forge script scripts/L2Genesis.s.sol:L2Genesis --sig 'runWithStateDump()' --chain-id $L2_CHAIN_ID",
+                
                 "cd /workspace/optimism/op-node/bin",
+                "echo $DEPLOY_CONFIG_PATH",
+                "cat $DEPLOY_CONFIG_PATH",
                 "./op-node genesis l2 \
                     --l1-rpc $L1_RPC_URL \
                     --deploy-config $DEPLOY_CONFIG_PATH \
@@ -102,6 +109,8 @@ def deploy_l2_contracts(
                     --l1-deployments $DEPLOYMENT_OUTFILE \
                     --outfile.l2 /network-configs/genesis.json \
                     --outfile.rollup /network-configs/rollup.json",
+
+                "ls -la /network-configs",
                 "mv $DEPLOY_CONFIG_PATH /network-configs/getting-started.json",
                 "mv $DEPLOYMENT_OUTFILE /network-configs/kurtosis.json",
                 "mv $STATE_DUMP_PATH /network-configs/state-dump.json",
@@ -159,7 +168,7 @@ def deploy_l2_contracts(
 
     l1_deposit_start_block = plan.run_sh(
         name="read-l1-deposit-start-block",
-        description="Getting the L1StandardBridgeProxy address",
+        description="Getting the L1 deposit start block",
         image="badouralix/curl-jq",
         run="jq -r .genesis.l1.number  /network-configs/rollup.json | tr -d '\n'",
         files={"/network-configs": op_genesis.files_artifacts[0]},
