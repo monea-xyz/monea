@@ -1,8 +1,9 @@
+mod authentication;
 mod cli;
 mod commands;
+mod manager;
 mod utils;
 use clap::Parser;
-mod authentication;
 
 fn main() {
     let cli = cli::Cli::parse();

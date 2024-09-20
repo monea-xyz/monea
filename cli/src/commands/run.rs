@@ -1,6 +1,6 @@
-use crate::utils::manager::parse_enclave_inspect_stdout;
-use crate::utils::manager::Manager;
-use crate::utils::manager::Service;
+use crate::manager::parse_enclave_inspect_stdout;
+use crate::manager::Manager;
+use crate::manager::Service;
 use crate::utils::path_helper;
 use clap::Args;
 use std::collections::HashMap;

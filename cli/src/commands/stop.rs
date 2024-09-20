@@ -1,5 +1,5 @@
+use crate::manager::Manager;
 use crate::utils::create_yaml_config::create_yaml_config;
-use crate::utils::manager::Manager;
 use crate::utils::path_helper;
 use clap::Args;
 use pathdiff;
