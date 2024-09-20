@@ -45,55 +45,55 @@ def run(plan, args):
         optimism_args_with_right_defaults.op_contract_deployer_params.image
     )
 
-    # # Deploy Create2 Factory contract (only need to do this once for multiple l2s)
-    # contract_deployer.deploy_factory_contract(
-    #     plan, l1_priv_key, l1_config_env_vars, l2_contract_deployer_image
-    # )
+    # Deploy Create2 Factory contract (only need to do this once for multiple l2s)
+    contract_deployer.deploy_factory_contract(
+        plan, l1_priv_key, l1_config_env_vars, l2_contract_deployer_image
+    )
     
-    # # Deploy L2s
-    # plan.print("Deploying a local L2")
-    # if type(optimism_args) == "dict":
-    #     l2_services_suffix = ""  # no suffix if one l2
-    #     l2_launcher.launch_l2(
-    #         plan,
-    #         l2_services_suffix,
-    #         optimism_args,
-    #         l1_config_env_vars,
-    #         l1_priv_key,
-    #         all_l1_participants[0].el_context,
-    #     )
-    # elif type(optimism_args) == "list":
-    #     seen_names = {}
-    #     seen_network_ids = {}
-    #     for l2_num, l2_args in enumerate(optimism_args):
-    #         name = l2_args["network_params"]["name"]
-    #         network_id = l2_args["network_params"]["network_id"]
-    #         if name in seen_names:
-    #             fail(
-    #                 "Duplicate name: {0} provided, make sure you use unique names.".format(
-    #                     name
-    #                 )
-    #             )
-    #         if network_id in seen_network_ids:
-    #             fail(
-    #                 "Duplicate network_id: {0} provided, make sure you use unique network_ids.".format(
-    #                     network_id
-    #                 )
-    #             )
+    # Deploy L2s
+    plan.print("Deploying a local L2")
+    if type(optimism_args) == "dict":
+        l2_services_suffix = ""  # no suffix if one l2
+        l2_launcher.launch_l2(
+            plan,
+            l2_services_suffix,
+            optimism_args,
+            l1_config_env_vars,
+            l1_priv_key,
+            all_l1_participants[0].el_context,
+        )
+    elif type(optimism_args) == "list":
+        seen_names = {}
+        seen_network_ids = {}
+        for l2_num, l2_args in enumerate(optimism_args):
+            name = l2_args["network_params"]["name"]
+            network_id = l2_args["network_params"]["network_id"]
+            if name in seen_names:
+                fail(
+                    "Duplicate name: {0} provided, make sure you use unique names.".format(
+                        name
+                    )
+                )
+            if network_id in seen_network_ids:
+                fail(
+                    "Duplicate network_id: {0} provided, make sure you use unique network_ids.".format(
+                        network_id
+                    )
+                )
 
-    #         seen_names[name] = True
-    #         seen_network_ids[network_id] = True
-    #         l2_services_suffix = "-{0}".format(name)
-    #         l2_launcher.launch_l2(
-    #             plan,
-    #             l2_services_suffix,
-    #             l2_args,
-    #             l1_config_env_vars,
-    #             l1_priv_key,
-    #             all_l1_participants[0].el_context,
-    #         )
-    # else:
-    #     fail("invalid type provided for param: `optimism-package`")
+            seen_names[name] = True
+            seen_network_ids[network_id] = True
+            l2_services_suffix = "-{0}".format(name)
+            l2_launcher.launch_l2(
+                plan,
+                l2_services_suffix,
+                l2_args,
+                l1_config_env_vars,
+                l1_priv_key,
+                all_l1_participants[0].el_context,
+            )
+    else:
+        fail("invalid type provided for param: `optimism-package`")
 
 
 def get_l1_config(all_l1_participants, l1_network_params, l1_network_id):

@@ -15,6 +15,13 @@ serde_yaml = "0.9.34"
 dirs = "5.0.1"
 dotenv = "0.15.0"
 pathdiff = "0.2.1"
+webbrowser = "1.0.2"
+anyhow = "1.0.89"
+jsonwebtoken = "9.3.0"
+crossterm = "0.28.1"
+ratatui = "0.28.1"
+rpassword = "7.3.1"
+reqwest = "0.11"
 
 [build-dependencies]
 reqwest = { version = "0.11", features = ["json", "blocking"] }

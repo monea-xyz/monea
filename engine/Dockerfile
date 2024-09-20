@@ -30,20 +30,20 @@ RUN curl -sL https://go.dev/dl/go$(curl -s https://raw.githubusercontent.com/eth
 ENV GOPATH=/go
 ENV PATH=/usr/local/go/bin:$GOPATH/bin:$PATH
 
-# Clone the Optimism monorepo and build the `op-node` binary for L2 genesis generation.
-RUN git clone https://github.com/ethereum-optimism/optimism.git && \
-  cd optimism && \
-  git checkout v1.7.0 && \
-  cd op-node && \
-  make
-
-# Old code using develop branch:
+# # Clone the Optimism monorepo and build the `op-node` binary for L2 genesis generation.
 # RUN git clone https://github.com/ethereum-optimism/optimism.git && \
 #   cd optimism && \
-#   git checkout develop && \
-#   git pull origin develop && \
+#   git checkout v1.7.0 && \
 #   cd op-node && \
 #   make
+
+# Old code using develop branch:
+RUN git clone https://github.com/ethereum-optimism/optimism.git && \
+  cd optimism && \
+  git checkout develop && \
+  git pull origin develop && \
+  cd op-node && \
+  make
 
 # Install foundry
 RUN curl -L https://foundry.paradigm.xyz | bash
@@ -51,7 +51,8 @@ ENV PATH="/root/.foundry/bin:${PATH}"
 RUN FOUNDRY_VERSION=$(curl -s https://raw.githubusercontent.com/ethereum-optimism/optimism/develop/versions.json | jq -r '.foundry') && foundryup -v nightly-$FOUNDRY_VERSION
 
 # Build the Optimism contracts
-RUN cd optimism/packages/contracts-bedrock && forge build
+RUN cd optimism/packages/contracts-bedrock
+RUN forge build
 
 
 # Use multi-stage build to keep the final image lean

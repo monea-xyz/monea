@@ -1,4 +1,4 @@
-use crate::commands::{InitArgs, RunArgs, StopArgs};
+use crate::commands::{AuthArgs, BillingArgs, InitArgs, RunArgs, StopArgs};
 use clap::{Parser, Subcommand};
 
 #[derive(Parser, Debug)]
@@ -20,4 +20,10 @@ pub enum Commands {
 
     #[clap(name = "stop", about = "Stop the project")]
     Stop(StopArgs),
+
+    #[clap(name = "auth", about = "Authentication with Monea")]
+    Auth(AuthArgs),
+
+    #[clap(name = "billing", about = "Billing information")]
+    Billing(BillingArgs),
 }
