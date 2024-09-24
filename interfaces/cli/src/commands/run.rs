@@ -43,7 +43,7 @@ pub fn run(args: RunArgs) -> Result<(), Box<dyn Error>> {
     command.arg("--args-file");
     command.arg(Path::new(&kurtosis_package_path).join("network_params.yaml"));
     command.arg("--enclave");
-    command.arg("monea-engine");
+    command.arg("monea-enclave");
 
     let status = command.status()?;
 
@@ -55,7 +55,7 @@ pub fn run(args: RunArgs) -> Result<(), Box<dyn Error>> {
     let output = Command::new("kurtosis")
         .arg("enclave")
         .arg("inspect")
-        .arg("monea-engine")
+        .arg("monea-enclave")
         .output()?;
 
     if !output.status.success() {
