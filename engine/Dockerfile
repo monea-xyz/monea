@@ -51,8 +51,7 @@ ENV PATH="/root/.foundry/bin:${PATH}"
 RUN FOUNDRY_VERSION=$(curl -s https://raw.githubusercontent.com/ethereum-optimism/optimism/develop/versions.json | jq -r '.foundry') && foundryup -v nightly-$FOUNDRY_VERSION
 
 # Build the Optimism contracts
-RUN cd optimism/packages/contracts-bedrock
-RUN forge build
+RUN cd optimism/packages/contracts-bedrock && forge build
 
 
 # Use multi-stage build to keep the final image lean
@@ -79,7 +78,7 @@ COPY --from=builder /root/.foundry /root/.foundry
 ENV PATH="/root/.foundry/bin:/usr/local/go/bin:${PATH}"
 
 # Create network-configs directory
-RUN mkdir -p /workspace/network-configs
+# RUN mkdir -p /workspace/optimism/network-configs
 
 # Set the working directory and default command
 WORKDIR /workspace/optimism

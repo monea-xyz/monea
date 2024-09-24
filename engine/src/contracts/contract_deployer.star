@@ -86,7 +86,7 @@ def deploy_l2_contracts(
                     ENVRC_PATH
                 ),
                 ". {0}".format(ENVRC_PATH),
-                "mkdir network-configs",
+                "mkdir -p /network-configs",
                 "cast send $GS_ADMIN_ADDRESS --value $FUND_VALUE --private-key $PRIVATE_KEY --rpc-url $L1_RPC_URL",  # Fund Admin
                 "cast send $GS_BATCHER_ADDRESS --value $FUND_VALUE --private-key $PRIVATE_KEY --rpc-url $L1_RPC_URL",  # Fund Batcher
                 "cast send $GS_PROPOSER_ADDRESS --value $FUND_VALUE --private-key $PRIVATE_KEY --rpc-url $L1_RPC_URL",  # Fund Proposer
