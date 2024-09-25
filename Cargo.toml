@@ -1,3 +1,3 @@
 [workspace]
-members = ["interfaces/cli"]
+members = ["interfaces/cli", "services/monea-core", "services/utils"]
 resolver = "2"

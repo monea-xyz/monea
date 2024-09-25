@@ -16,9 +16,10 @@ fn main() {
         .join("kurtosis-pkg");
     let kurtosis_pkg_dest = Path::new(&cli_dir)
         .join("..")
+        .join("..")
         .join("target")
         .join(&profile)
-        .join("kurtosis package");
+        .join("kurtosis-pkg");
     // let kurtosis_dest = Path::new(&cli_dir).join("..").join("target").join(&profile);
 
     println!("kurtosis_pkg_src: {}", kurtosis_pkg_src.display());
