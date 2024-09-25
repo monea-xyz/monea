@@ -1,3 +1,4 @@
+use monea_utils::constants;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::error::Error;
@@ -49,7 +50,7 @@ impl Manager {
 
     pub fn save_config(&self) -> Result<(), Box<dyn Error>> {
         let updated_yaml = serde_yaml::to_string(&self.config)?;
-        fs::write(config::get_config_path(), updated_yaml)?;
+        fs::write(constants::get_config_path(), updated_yaml)?;
         Ok(())
     }
 

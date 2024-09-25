@@ -1,19 +1,12 @@
-use dirs::home_dir;
-use std::{collections::HashMap, error::Error, fs, path::PathBuf};
+use monea_utils::constants;
+use std::{collections::HashMap, error::Error, fs};
 
 use super::{Chain, Config, Enclave, Service};
 
 const DEFAULT_CHAIN_NAME: &str = "ethereum-l1";
 
-pub fn get_config_path() -> PathBuf {
-    let mut path = home_dir().expect("Unable to find home directory");
-    path.push(".monea");
-    path.push("manager.yaml");
-    path
-}
-
 pub fn load_or_create_config() -> Result<Config, Box<dyn Error>> {
-    let config_path = get_config_path();
+    let config_path = constants::get_config_path();
 
     println!("Config path: {}", config_path.display());
 
