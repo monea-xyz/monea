@@ -15,6 +15,9 @@ pub enum Commands {
     #[clap(name = "init", about = "Initialize a new Monea repo")]
     Init(InitArgs),
 
+    #[clap(name = "tui", aliases = ["ui", "dashboard", "viz"], about = "Open the Monea TUI")]
+    Tui,
+
     #[clap(name = "run", about = "Spin up a local development environment")]
     Run(RunArgs),
 

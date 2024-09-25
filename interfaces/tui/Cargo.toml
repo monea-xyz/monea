@@ -1,0 +1,10 @@
+[package]
+name = "monea-tui"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+ratatui = { version = "0.28.0", features = ["all-widgets"] }
+crossterm = "0.25"
+ctrlc = "3.2"
+dark-light = "1.1.1"

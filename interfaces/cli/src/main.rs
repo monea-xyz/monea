@@ -14,6 +14,12 @@ fn main() {
                 std::process::exit(1);
             }
         }
+        Some(cli::Commands::Tui) => {
+            if let Err(e) = commands::tui::start_tui() {
+                eprintln!("Error: {}", e);
+                std::process::exit(1);
+            }
+        }
         Some(cli::Commands::Run(args)) => {
             if let Err(e) = commands::run::run(args) {
                 eprintln!("Error: {}", e);
