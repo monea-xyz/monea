@@ -53,7 +53,7 @@ pub fn parse(stdout: &str) -> Result<Vec<Service>, Box<dyn Error>> {
 
 // EXAMPLE STDOUT STRING:
 //
-// Name:            monea-engine
+// Name:            monea-enclave
 // UUID:            fbf89d96bb0c
 // Status:          RUNNING
 // Creation Time:   Tue, 17 Sep 2024 16:16:07 PDT

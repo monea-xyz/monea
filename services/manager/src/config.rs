@@ -21,7 +21,7 @@ pub fn load_or_create_config() -> Result<Config, Box<dyn Error>> {
         // Create default manager.yaml config
         let default_manager_config = Config {
             enclave: Enclave {
-                id: String::from("monea-engine"),
+                id: String::from("monea-enclave"),
                 chains: {
                     let mut chains = HashMap::new();
                     chains.insert(

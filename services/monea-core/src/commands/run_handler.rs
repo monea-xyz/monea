@@ -16,7 +16,7 @@ pub fn run_handler(project_path: Option<String>) -> Result<(), Box<dyn Error>> {
     }
 
     // Hardcoded service names for each chain
-    let chain_services = vec![
+    let chain_services: Vec<(&str, Vec<&str>)> = vec![
         (
             "ethereum-l1",
             vec![
@@ -25,7 +25,15 @@ pub fn run_handler(project_path: Option<String>) -> Result<(), Box<dyn Error>> {
                 "vc-1-geth-lighthouse",
             ],
         ),
-        ("optimism-l2", vec!["op-node", "op-geth"]),
+        (
+            "optimism-l2",
+            vec![
+                "op-cl-1-op-node-op-reth",
+                "op-el-1-op-reth-op-node",
+                "op-proposer",
+                "op-batcher",
+            ],
+        ),
     ];
 
     let kurtosis_package_path = path_helper::get_kurtosis_package_path();

@@ -36,6 +36,7 @@ pub fn stop_handler(project_path: Option<String>, layer: String) -> Result<(), B
             ),
         )])),
     )]);
+
     let temp_yaml_path = create_yaml_config(&services_data, Some("temp_stop_services.yaml"))?;
 
     let current_dir = std::env::current_dir()?;
@@ -53,7 +54,7 @@ pub fn stop_handler(project_path: Option<String>, layer: String) -> Result<(), B
     command.arg("--main-file");
     command.arg("stop_services.star");
     command.arg("--enclave");
-    command.arg("monea-engine");
+    command.arg("monea-enclave");
 
     let status = command.status()?;
 
