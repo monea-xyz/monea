@@ -22,9 +22,9 @@ crossterm = "0.28.1"
 ratatui = "0.28.1"
 rpassword = "7.3.1"
 reqwest = "0.11"
-monea-core = { path = "../../services/monea-core" }
-monea-utils = { path = "../../services/utils" }
+monea-utils = { path = "../../utils" }
 monea-tui = { path = "../tui" }
+monea-handlers = { path = "../../handlers" }
 
 [build-dependencies]
 reqwest = { version = "0.11", features = ["json", "blocking"] }

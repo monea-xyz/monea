@@ -9,10 +9,10 @@ use monea_utils::path_helper;
 
 pub fn run_handler(project_path: Option<String>) -> Result<(), Box<dyn Error>> {
     let project_path = project_path.unwrap_or_else(|| ".".to_string());
-    let config_path = Path::new(&project_path).join("monea.config.json");
+    let config_path = Path::new(&project_path).join("monea.config.yaml");
 
     if !config_path.exists() {
-        return Err("monea.config.json not found. Please run 'monea init' first.".into());
+        return Err("monea.config.yaml not found. Please run 'monea init' first.".into());
     }
 
     // Hardcoded service names for each chain

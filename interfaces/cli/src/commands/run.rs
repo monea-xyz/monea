@@ -1,5 +1,5 @@
 use clap::Args;
-use monea_core::commands::run_handler;
+use monea_handlers::commands::run_handler;
 
 #[derive(Args, Debug)]
 pub struct RunArgs {

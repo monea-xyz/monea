@@ -1,5 +1,5 @@
 use clap::Args;
-use monea_core::commands::stop_handler;
+use monea_handlers::commands::stop_handler;
 
 #[derive(Args, Debug)]
 pub struct StopArgs {

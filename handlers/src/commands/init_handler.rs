@@ -12,18 +12,18 @@ pub fn init_handler(
     let project_name = name.unwrap_or_else(|| "Monea Rollup".to_string());
     let monea_config_content = get_monea_config_content(&project_name);
 
-    // Check if monea.config.json already exists
-    let config_file_path = project_path.join("monea.config.json");
+    // Check if monea.config.yaml already exists
+    let config_file_path = project_path.join("monea.config.yaml");
     if config_file_path.exists() {
         return Err(format!(
-            "monea.config.json already exists at {}",
+            "monea.config.yaml already exists at {}",
             config_file_path.display()
         )
         .into());
     }
 
     if project_path.as_os_str() == "." || project_path.is_dir() {
-        create_file(project_path, "monea.config.json", &monea_config_content)?;
+        create_file(project_path, "monea.config.yaml", &monea_config_content)?;
     } else if !project_path.exists() {
         fs::create_dir_all(project_path)?;
         create_project_files(project_path, &monea_config_content)?;
@@ -62,7 +62,7 @@ fn create_project_files(
             "README.md",
             "# My Monea Project\n\nWelcome to your new Monea project!",
         ),
-        ("monea.config.json", monea_config_content),
+        ("monea.config.yaml", monea_config_content),
     ];
 
     for (file_name, content) in files {
