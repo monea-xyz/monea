@@ -1,4 +1,4 @@
-use crate::app::{App, TabType};
+use crate::model::{Model, TabType};
 use crate::tab_views::{baselayer, marketplace, rollup, settings};
 use dark_light::detect;
 use ratatui::{
@@ -9,7 +9,7 @@ use ratatui::{
     Frame,
 };
 
-pub fn ui(f: &mut Frame, app: &App) {
+pub fn ui(f: &mut Frame, model: &Model) {
     // Set the background color of the entire terminal to black if light mode
     let system_theme = detect();
     let background_style = match system_theme {
@@ -17,14 +17,14 @@ pub fn ui(f: &mut Frame, app: &App) {
         _ => Style::default(),
     };
 
-    f.render_widget(Block::default().style(background_style), f.size());
+    f.render_widget(Block::default().style(background_style), f.area());
 
     let chunks = Layout::default()
         .direction(Direction::Vertical)
         .constraints([Constraint::Length(3), Constraint::Min(0)].as_ref())
         .split(f.area());
 
-    let titles: Vec<String> = app
+    let titles: Vec<String> = model
         .get_tabs()
         .iter()
         .enumerate()
@@ -44,7 +44,7 @@ pub fn ui(f: &mut Frame, app: &App) {
                 let (first, rest) = title.split_at(1);
                 Span::styled(
                     format!("{}{}", first, rest),
-                    if i == app.active_tab_index() {
+                    if i == model.active_tab_index() {
                         Style::default()
                             .fg(Color::Magenta)
                             .add_modifier(Modifier::UNDERLINED)
@@ -56,7 +56,7 @@ pub fn ui(f: &mut Frame, app: &App) {
             .collect::<Vec<Span>>(),
     )
     .block(Block::default().borders(Borders::ALL).title("Views"))
-    .select(app.active_tab_index())
+    .select(model.active_tab_index())
     .style(Style::default().fg(Color::White))
     .highlight_style(
         Style::default()
@@ -72,14 +72,14 @@ pub fn ui(f: &mut Frame, app: &App) {
     f.render_widget(main_view, chunks[1]);
 
     // Render the main content based on the current view
-    render_main_view_content(f, app, chunks[1]);
+    render_main_view_content(f, model, chunks[1]);
 }
 
-fn render_main_view_content(f: &mut Frame, app: &App, area: ratatui::layout::Rect) {
-    match app.active_tab().tab_type {
-        TabType::Baselayer => baselayer::render_content(f, app, area),
-        TabType::Rollup(_) => rollup::render_content(f, app, area),
-        TabType::Marketplace => marketplace::render_content(f, app, area),
-        TabType::Settings => settings::render_content(f, app, area),
+fn render_main_view_content(f: &mut Frame, model: &Model, area: ratatui::layout::Rect) {
+    match model.active_tab().tab_type {
+        TabType::Baselayer => baselayer::render_content(f, model, area),
+        TabType::Rollup(_) => rollup::render_content(f, model, area),
+        TabType::Marketplace => marketplace::render_content(f, model, area),
+        TabType::Settings => settings::render_content(f, model, area),
     }
 }

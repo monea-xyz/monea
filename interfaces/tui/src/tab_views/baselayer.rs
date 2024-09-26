@@ -1,7 +1,8 @@
 use crate::components::blockchain::Blockchain;
 use crate::components::chain_info::ChainInfo;
+use crate::components::transaction_table::TransactionTable;
 use crate::components::urls::{Container, ContainerUrl, UrlsComponent};
-use crate::{app::App, components::transaction_table::TransactionTable};
+use crate::model::Model;
 use ratatui::{
     layout::{Constraint, Direction, Layout, Rect},
     style::{Color, Style},
@@ -9,7 +10,7 @@ use ratatui::{
     Frame,
 };
 
-pub fn render_content(f: &mut Frame, app: &App, area: Rect) {
+pub fn render_content(f: &mut Frame, model: &Model, area: Rect) {
     let layout = Layout::default()
         .direction(Direction::Vertical)
         .constraints([

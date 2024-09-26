@@ -1,4 +1,4 @@
-use crate::app::App;
+use crate::model::Model;
 use ratatui::{
     layout::{Constraint, Direction, Layout, Rect},
     style::{Color, Style},
@@ -6,7 +6,7 @@ use ratatui::{
     Frame,
 };
 
-pub fn render_content(f: &mut Frame, app: &App, area: Rect) {
+pub fn render_content(f: &mut Frame, model: &Model, area: Rect) {
     let chunks = Layout::default()
         .direction(Direction::Vertical)
         .constraints([Constraint::Percentage(30), Constraint::Percentage(70)].as_ref())

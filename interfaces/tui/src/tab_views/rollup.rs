@@ -1,4 +1,3 @@
-use crate::app::App;
 use ratatui::{
     layout::Rect,
     style::{Color, Style},
@@ -6,13 +5,15 @@ use ratatui::{
     Frame,
 };
 
-pub fn render_content(f: &mut Frame, app: &App, area: Rect) {
+use crate::model::Model;
+
+pub fn render_content(f: &mut Frame, model: &Model, area: Rect) {
     let paragraph = Paragraph::new("content".to_string())
         .style(Style::default().fg(Color::White))
         .block(
             Block::default()
                 .borders(Borders::ALL)
-                .title(app.active_tab().title.clone()),
+                .title(model.active_tab().title.clone()),
         );
     f.render_widget(paragraph, area);
 }
