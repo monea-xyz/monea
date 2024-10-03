@@ -41,14 +41,25 @@ pub fn init_handler(
     Ok(())
 }
 
-// Define monea config file content as a function
+// define monea config file content as a function
 fn get_monea_config_content(name: &str) -> String {
     format!(
-        r#"{{
-"name": "{}",
-"version": "0.1.0"
-}}"#,
-        name
+        r#"name: {name}
+version: 0.1.0
+framework: op-stack
+settlement: ethereum-baselayer-l1-devnet
+data-availability: ethereum-baselayer-l1-devnet
+pipeline:
+  posthook-baselayer:
+    contract-deployments: |
+      - network: ethereum-baselayer-l1-devnet
+        deploy-script: ./contracts/scripts/Deploy-l1.s.sol
+  posthook-rollup:
+    contract-deployments: |
+      - network: {name}
+        deploy-script: ./contracts/scripts/Deploy-l2.s.sol
+"#,
+        name = name
     )
 }
 

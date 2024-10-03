@@ -40,15 +40,15 @@ ENV PATH=/usr/local/go/bin:$GOPATH/bin:$PATH
 # Old code using develop branch:
 RUN git clone https://github.com/ethereum-optimism/optimism.git && \
   cd optimism && \
-  git checkout develop && \
-  git pull origin develop && \
+  git checkout b0a4c11489abc7adfa4e801d6b06fb9e496c200f && \
+  git pull origin b0a4c11489abc7adfa4e801d6b06fb9e496c200f && \
   cd op-node && \
   make
 
 # Install foundry
 RUN curl -L https://foundry.paradigm.xyz | bash
 ENV PATH="/root/.foundry/bin:${PATH}"
-RUN FOUNDRY_VERSION=$(curl -s https://raw.githubusercontent.com/ethereum-optimism/optimism/develop/versions.json | jq -r '.foundry') && foundryup -v nightly-$FOUNDRY_VERSION
+RUN FOUNDRY_VERSION=$(curl -s https://raw.githubusercontent.com/ethereum-optimism/optimism/develop/versions.json | jq -r '.foundry') && foundryup
 
 # Build the Optimism contracts
 RUN cd optimism/packages/contracts-bedrock && forge build
