@@ -1,6 +1,7 @@
 use crate::model::{Model, TabType};
 use crate::tab_views::{baselayer, marketplace, rollup, settings};
 use dark_light::detect;
+use ratatui::layout::Alignment;
 use ratatui::{
     layout::{Constraint, Direction, Layout, Margin},
     style::{Color, Modifier, Style},
@@ -77,7 +78,17 @@ pub fn ui(f: &mut Frame, model: &Model) {
 
 fn render_main_view_content(f: &mut Frame, model: &Model, area: ratatui::layout::Rect) {
     match model.active_tab().tab_type {
-        TabType::Baselayer => baselayer::render_content(f, model, area),
+        TabType::Baselayer => {
+            if let Some(baselayer_data) = &model.baselayer_data {
+                baselayer::render_content(f, model, area);
+            } else {
+                // render a message that baselayer is not available
+                let message = Paragraph::new("Baselayer data is not available")
+                    .style(Style::default().fg(Color::Red))
+                    .alignment(Alignment::Center);
+                f.render_widget(message, area);
+            }
+        }
         TabType::Rollup(_) => rollup::render_content(f, model, area),
         TabType::Marketplace => marketplace::render_content(f, model, area),
         TabType::Settings => settings::render_content(f, model, area),

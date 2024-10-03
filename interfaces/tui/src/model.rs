@@ -51,6 +51,10 @@ impl Model {
         Model {
             tabs: vec![
                 Tab {
+                    tab_type: TabType::Baselayer,
+                    title: "Baselayer".to_string(),
+                },
+                Tab {
                     tab_type: TabType::Marketplace,
                     title: "Marketplace".to_string(),
                 },
@@ -60,13 +64,30 @@ impl Model {
                 },
             ],
             current_tab_index: 0,
-            baselayer_data: None,
+            baselayer_data: Some(BaseLayerData {
+                transactions: Vec::new(),
+                chain_info: ChainInfo::new(
+                    "Ethereum".to_string(),
+                    "1".to_string(),
+                    "ETH".to_string(),
+                    "18".to_string(),
+                    "Mainnet".to_string(),
+                    "L1".to_string(),
+                    "On-chain".to_string(),
+                    "EVM".to_string(),
+                    "L1".to_string(),
+                    "12 seconds".to_string(),
+                    "30,000,000".to_string(),
+                    "15,000,000".to_string(),
+                ),
+                containers: Vec::new(),
+                logs: Vec::new(),
+            }),
             rollup_data: Vec::new(),
             marketplace_modules: Vec::new(),
             settings: vec![
                 ("Theme".to_string(), "Dark".to_string()),
                 ("Language".to_string(), "English".to_string()),
-                // Add more default settings as needed
             ],
         }
     }
