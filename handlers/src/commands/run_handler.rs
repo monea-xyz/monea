@@ -28,10 +28,11 @@ pub fn run_handler(project_path: Option<String>) -> Result<(), Box<dyn Error>> {
         (
             "optimism-l2",
             vec![
-                "op-cl-1-op-node-op-reth",
-                "op-el-1-op-reth-op-node",
-                "op-proposer",
-                "op-batcher",
+                "op-cl-1-op-node-op-reth-op-kurtosis",
+                "op-el-1-op-reth-op-node-op-kurtosis",
+                "op-batcher-op-kurtosis",
+                // there is no op-proposer in OP Stack anymore
+                // "op-proposer-op-kurtosis",
             ],
         ),
     ];
