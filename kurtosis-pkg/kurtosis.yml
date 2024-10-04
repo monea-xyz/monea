@@ -1,4 +1,4 @@
-name: "github.com/monea-xyz/monea-core/engine"
+name: "github.com/monea-xyz/monea-core/kurtosis-pkg"
 description: |
-  # Monea Core Engine
+  # Monea Core Kurtosis Package
   This is a Kurtosis package for deploying a Monea Rollup
