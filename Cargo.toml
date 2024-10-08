@@ -1,3 +1,3 @@
 [workspace]
-members = ["interfaces/cli", "interfaces/tui", "handlers", "manager", "utils"]
+members = ["interfaces/cli", "interfaces/tui", "handlers", "manager", "utils", "services/file_writer"]
 resolver = "2"

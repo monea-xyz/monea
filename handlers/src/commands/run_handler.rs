@@ -7,9 +7,9 @@ use std::process::Command;
 use monea_manager::{parse_enclave_inspect_stdout, Manager, Service};
 use monea_utils::path_helper;
 
-pub fn run_handler(project_path: Option<String>) -> Result<(), Box<dyn Error>> {
-    let project_path = project_path.unwrap_or_else(|| ".".to_string());
-    let config_path = Path::new(&project_path).join("monea.config.yaml");
+pub fn run_handler(config_path: Option<String>) -> Result<(), Box<dyn Error>> {
+    let config_path = config_path.unwrap_or_else(|| ".".to_string());
+    let config_path = Path::new(&config_path).join("monea.config.yaml");
 
     if !config_path.exists() {
         return Err("monea.config.yaml not found. Please run 'monea init' first.".into());
@@ -39,18 +39,45 @@ pub fn run_handler(project_path: Option<String>) -> Result<(), Box<dyn Error>> {
 
     let kurtosis_package_path = path_helper::get_kurtosis_package_path();
 
-    let mut command = Command::new("kurtosis");
-    command.arg("run");
-    command.arg(&kurtosis_package_path);
-    command.arg("--args-file");
-    command.arg(Path::new(&kurtosis_package_path).join("network_params.yaml"));
-    command.arg("--enclave");
-    command.arg("monea-enclave");
+    // start the l1 network
+    let mut l1_command = Command::new("kurtosis");
+    l1_command.arg("run");
+    l1_command.arg(&kurtosis_package_path);
+    l1_command.arg("--main-file");
+    l1_command.arg("start_l1.star");
+    l1_command.arg("--enclave");
+    l1_command.arg("monea-enclave");
 
-    let status = command.status()?;
+    let l1_command_status = l1_command.status()?;
 
-    if !status.success() {
-        return Err("Kurtosis run command failed".into());
+    if !l1_command_status.success() {
+        return Err("Kurtosis run command failed for l1".into());
+    }
+
+    // copy l1_config file from the enclave into the kurtosis package directory
+    Command::new("kurtosis")
+        .arg("files")
+        .arg("download")
+        .arg("monea-enclave")
+        .arg("l1_config")
+        .arg(path_helper::get_kurtosis_package_path())
+        .output()?;
+
+    // start the l2 network
+    let mut l2_command = Command::new("kurtosis");
+    l2_command.arg("run");
+    l2_command.arg(&kurtosis_package_path);
+    l2_command.arg("--main-file");
+    l2_command.arg("start_opstack.star");
+    l2_command.arg("--args-file");
+    l2_command.arg(Path::new(&kurtosis_package_path).join("network_params.yaml"));
+    l2_command.arg("--enclave");
+    l2_command.arg("monea-enclave");
+
+    let l2_command_status = l2_command.status()?;
+
+    if !l2_command_status.success() {
+        return Err("Kurtosis run command failed for l2".into());
     }
 
     // Now, let's inspect the enclave and parse the output

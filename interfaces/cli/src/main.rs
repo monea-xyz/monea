@@ -20,6 +20,12 @@ fn main() {
                 std::process::exit(1);
             }
         }
+        Some(cli::Commands::Check(args)) => {
+            if let Err(e) = commands::check::check(args) {
+                eprintln!("Error: {}", e);
+                std::process::exit(1);
+            }
+        }
         Some(cli::Commands::Run(args)) => {
             if let Err(e) = commands::run::run(args) {
                 eprintln!("Error: {}", e);

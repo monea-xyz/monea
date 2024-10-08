@@ -5,7 +5,7 @@ use std::process::Command;
 
 // We'll need to import or redefine these types and functions
 use monea_manager::Manager;
-use monea_utils::create_yaml_config::create_yaml_config;
+use monea_utils::create_yaml_config::create_temp_yaml_file;
 use monea_utils::path_helper;
 
 pub fn stop_handler(project_path: Option<String>, layer: String) -> Result<(), Box<dyn Error>> {
@@ -37,7 +37,7 @@ pub fn stop_handler(project_path: Option<String>, layer: String) -> Result<(), B
         )])),
     )]);
 
-    let temp_yaml_path = create_yaml_config(&services_data, Some("temp_stop_services.yaml"))?;
+    let temp_yaml_path = create_temp_yaml_file(&services_data, Some("temp_stop_services.yaml"))?;
 
     let current_dir = std::env::current_dir()?;
 

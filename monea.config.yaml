@@ -1,4 +1,14 @@
-{
-  "name": "Monea Rollup",
-  "version": "0.1.0"
-}
+project_name: Monea Appchain
+chains:
+- name: ethereum-l1
+  chain_id: 1
+  layer_number: 1
+  block_time: 12
+- name: monea-l2
+  chain_id: 2151908
+  framework: OpStack
+  layer_number: 2
+  block_time: 2
+  settlement_network: ethereum-l1
+  data_availability: ethereum-l1
+pipeline: {}
