@@ -1,69 +1,38 @@
+pub mod chains;
 pub mod frameworks;
+pub mod pipeline;
 pub mod verifier;
-use std::{fs, io::Write, path::Path};
-
-use frameworks::FrameworkConfig;
+use chains::{ChainConfig, DataAvailabilityConfig, DataAvailabilityTypes, SettlementConfig};
+use frameworks::{FrameworkConfig, FrameworkType};
+use pipeline::PipelineConfig;
 use serde::{Deserialize, Serialize};
+use std::{fs, io::Write, path::Path};
 use thiserror::Error;
 
 #[derive(Debug, Serialize, Deserialize)]
-pub enum FrameworkType {
-    OpStack,
-    ArbitrumNitro,
+pub struct LayerConfig {
+    pub pipeline: Option<PipelineConfig>,
+    pub chains: Vec<ChainConfig>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
-pub struct ChainConfig {
-    pub name: String,
-
-    pub chain_id: u64,
-
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub framework: Option<FrameworkType>,
-
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub framework_config: Option<FrameworkConfig>,
-
-    pub layer_number: u64,
-
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub block_time: Option<u64>,
-
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub settlement_network: Option<String>,
-
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub data_availability: Option<String>,
-    // #[serde(skip_serializing_if = "Option::is_none")]
-    // genesis_file_path: Option<String>,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-pub struct PipelineConfig {
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub pre_layer_one: Option<String>,
-
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub post_layer_one: Option<String>,
-
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub pre_layer_two: Option<String>,
-
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub post_layer_two: Option<String>,
-
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub pre_layer_three: Option<String>,
-
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub post_layer_three: Option<String>,
-}
-
+// We arbitrarily support up to 14 layers
 #[derive(Debug, Serialize, Deserialize)]
 pub struct MoneaProjectConfig {
     pub project_name: String,
-    pub chains: Vec<ChainConfig>,
-    pub pipeline: PipelineConfig,
+    pub layer1: Option<LayerConfig>,
+    pub layer2: Option<LayerConfig>,
+    pub layer3: Option<LayerConfig>,
+    pub layer4: Option<LayerConfig>,
+    pub layer5: Option<LayerConfig>,
+    pub layer6: Option<LayerConfig>,
+    pub layer7: Option<LayerConfig>,
+    pub layer8: Option<LayerConfig>,
+    pub layer9: Option<LayerConfig>,
+    pub layer10: Option<LayerConfig>,
+    pub layer11: Option<LayerConfig>,
+    pub layer12: Option<LayerConfig>,
+    pub layer13: Option<LayerConfig>,
+    pub layer14: Option<LayerConfig>,
 }
 
 #[derive(Error, Debug)]
@@ -96,36 +65,52 @@ impl MoneaProjectConfig {
 
         let config = Self {
             project_name: project_name.clone(),
-            chains: vec![
-                ChainConfig {
+
+            layer1: Some(LayerConfig {
+                pipeline: None,
+                chains: vec![ChainConfig {
                     name: "ethereum-l1".to_string(),
                     chain_id: 1,
-                    framework: None,
-                    layer_number: 1,
                     block_time: Some(12),
+                    framework_type: None,
                     framework_config: None,
-                    settlement_network: None,
+                    deploy: None,
+                    settlement: None,
                     data_availability: None,
-                },
-                ChainConfig {
+                }],
+            }),
+            layer2: Some(LayerConfig {
+                pipeline: Some(PipelineConfig {
+                    pre: None,
+                    post: None,
+                }),
+                chains: vec![ChainConfig {
                     name: "monea-l2".to_string(),
                     chain_id: 2151908,
-                    framework: Some(FrameworkType::OpStack),
-                    layer_number: 2,
+                    deploy: Some(true),
                     block_time: Some(2),
+                    framework_type: Some(FrameworkType::OpStack),
                     framework_config: None,
-                    settlement_network: Some("ethereum-l1".to_string()),
-                    data_availability: Some("ethereum-l1".to_string()),
-                },
-            ],
-            pipeline: PipelineConfig {
-                pre_layer_one: None,
-                post_layer_one: None,
-                pre_layer_two: None,
-                post_layer_two: None,
-                pre_layer_three: None,
-                post_layer_three: None,
-            },
+                    settlement: Some(SettlementConfig {
+                        network_id: 2151908,
+                    }),
+                    data_availability: Some(DataAvailabilityConfig {
+                        da_type: DataAvailabilityTypes::Blobs,
+                    }),
+                }],
+            }),
+            layer3: None,
+            layer4: None,
+            layer5: None,
+            layer6: None,
+            layer7: None,
+            layer8: None,
+            layer9: None,
+            layer10: None,
+            layer11: None,
+            layer12: None,
+            layer13: None,
+            layer14: None,
         };
 
         let config_content = serde_yaml::to_string(&config)?;
@@ -136,6 +121,6 @@ impl MoneaProjectConfig {
     }
 
     pub fn verify(project_config_path: &Path) -> Result<(), ConfigError> {
-        verifier::verify_config(project_config_path.to_str().unwrap())
+        verifier::verify_project_config(project_config_path.to_str().unwrap())
     }
 }

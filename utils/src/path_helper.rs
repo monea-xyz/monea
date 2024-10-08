@@ -17,6 +17,7 @@ pub fn get_kurtosis_package_path() -> PathBuf {
     path
 }
 
+// TODO change fn name structure
 pub fn get_global_dot_monea_path() -> PathBuf {
     let mut path = dirs::home_dir().expect("Failed to get home directory");
     path.push(".monea");
