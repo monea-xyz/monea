@@ -2,9 +2,8 @@ project_name: Monea Appchain
 
 layer1:
   chains:
-  - name: ethereum-l1
+  - name: Monea L1 Devnet
     chain_id: 342836
-    layer_number: 1
     block_time: 12
 
 layer2:
@@ -17,7 +16,6 @@ layer2:
     deploy: true
     chain_id: 2151908
     framework_type: OpStack
-    layer_number: 2
     block_time: 2
     settlement:
       network_id: 2151908
