@@ -1,4 +1,4 @@
-use crate::commands::{AuthArgs, BillingArgs, InitArgs, RunArgs, StopArgs};
+use crate::commands::{AuthArgs, BillingArgs, CheckArgs, InitArgs, RunArgs, StopArgs};
 use clap::{Parser, Subcommand};
 
 #[derive(Parser, Debug)]
@@ -17,6 +17,9 @@ pub enum Commands {
 
     #[clap(name = "tui", aliases = ["ui", "dashboard", "viz"], about = "Open the Monea TUI")]
     Tui,
+
+    #[clap(name = "check", aliases = ["verify", "verify-config"], about = "Verify the Monea project configuration")]
+    Check(CheckArgs),
 
     #[clap(name = "run", about = "Spin up a local development environment")]
     Run(RunArgs),

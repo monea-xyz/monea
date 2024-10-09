@@ -1,12 +1,13 @@
 use clap::Args;
 use monea_handlers::commands::run_handler;
+use std::path::Path;
 
 #[derive(Args, Debug)]
 pub struct RunArgs {
     #[arg()]
-    pub project_path: Option<String>,
+    pub config_path: Option<String>,
 }
 
 pub fn run(args: RunArgs) -> Result<(), Box<dyn std::error::Error>> {
-    run_handler::run_handler(args.project_path)
+    run_handler::run_handler(args.config_path.as_deref().map(Path::new))
 }

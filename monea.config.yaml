@@ -1,4 +1,23 @@
-{
-  "name": "Monea Rollup",
-  "version": "0.1.0"
-}
+project_name: Monea Appchain
+
+layer1:
+  chains:
+  - name: Monea L1 Devnet
+    chain_id: 342836
+    block_time: 12
+
+layer2:
+  pipeline: {
+    pre: [],
+    post: [],
+  }
+  chains:
+  - name: Monea L2 Devnet
+    deploy: true
+    chain_id: 2151908
+    framework_type: OpStack
+    block_time: 2
+    settlement:
+      network_id: 2151908
+    data_availability:
+      type: Blobs

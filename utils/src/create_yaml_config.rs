@@ -4,7 +4,7 @@ use std::fs;
 use std::path::PathBuf;
 use std::process::Command;
 
-pub fn create_yaml_config<T: Serialize>(
+pub fn create_temp_yaml_file<T: Serialize>(
     data: &T,
     filename: Option<&str>,
 ) -> Result<PathBuf, Box<dyn Error>> {
