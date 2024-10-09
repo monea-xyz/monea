@@ -45,6 +45,8 @@ pub enum ConfigError {
     ParseError(#[from] serde_yaml::Error),
     #[error("Invalid config: {0}")]
     ValidationError(String),
+    #[error("Unknown field in config: {0}")]
+    UnknownField(String),
 }
 
 impl MoneaProjectConfig {

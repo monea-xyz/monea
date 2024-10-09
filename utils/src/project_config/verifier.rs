@@ -1,4 +1,6 @@
 use serde_yaml;
+use serde_yaml::Value;
+use std::collections::HashSet;
 use std::fs;
 use std::path::Path;
 
@@ -24,6 +26,44 @@ pub fn verify_project_config(relative_path: &str) -> Result<(), ConfigError> {
     }
 
     let config_contents = fs::read_to_string(config_path)?;
+
+    // Parse the YAML as a generic Value to check for unknown fields
+    let yaml_value: Value = serde_yaml::from_str(&config_contents)?;
+
+    // Define the known top-level fields
+    let known_fields: HashSet<&str> = [
+        "project_name",
+        "layer1",
+        "layer2",
+        "layer3",
+        "layer4",
+        "layer5",
+        "layer6",
+        "layer7",
+        "layer8",
+        "layer9",
+        "layer10",
+        "layer11",
+        "layer12",
+        "layer13",
+        "layer14",
+    ]
+    .iter()
+    .cloned()
+    .collect();
+
+    // Check for unknown fields
+    if let Value::Mapping(map) = yaml_value {
+        for key in map.keys() {
+            if let Value::String(field_name) = key {
+                if !known_fields.contains(field_name.as_str()) {
+                    return Err(ConfigError::UnknownField(field_name.clone()));
+                }
+            }
+        }
+    }
+
+    // Parse the config now that we've checked for unknown fields
     let config: MoneaProjectConfig = serde_yaml::from_str(&config_contents)?;
 
     // validate project name
@@ -51,6 +91,23 @@ pub fn verify_project_config(relative_path: &str) -> Result<(), ConfigError> {
 }
 
 fn validate_layer_config(layer_config: &LayerConfig, layer_number: u64) -> Result<(), ConfigError> {
+    // Define known fields for LayerConfig
+    let known_fields: HashSet<&str> = ["pipeline", "chains"].iter().cloned().collect();
+
+    // Check for unknown fields
+    if let Value::Mapping(map) = serde_yaml::to_value(layer_config)? {
+        for key in map.keys() {
+            if let Value::String(field_name) = key {
+                if !known_fields.contains(field_name.as_str()) {
+                    return Err(ConfigError::UnknownField(format!(
+                        "Unknown field '{}' in layer {}",
+                        field_name, layer_number
+                    )));
+                }
+            }
+        }
+    }
+
     // validate chains
     if layer_config.chains.is_empty() {
         return Err(ConfigError::ValidationError(format!(
@@ -67,15 +124,33 @@ fn validate_layer_config(layer_config: &LayerConfig, layer_number: u64) -> Resul
 }
 
 fn validate_chain_config(chain: &ChainConfig, layer_number: u64) -> Result<(), ConfigError> {
-    if chain.name.is_empty() {
-        return Err(ConfigError::ValidationError(
-            "Chain name is required".to_string(),
-        ));
-    }
-    if chain.chain_id == 0 {
-        return Err(ConfigError::ValidationError(
-            "Chain id must be greater than 0".to_string(),
-        ));
+    // Define known fields for ChainConfig
+    let known_fields: HashSet<&str> = [
+        "name",
+        "chain_id",
+        "block_time",
+        "framework_type",
+        "framework_config",
+        "deploy",
+        "settlement",
+        "data_availability",
+    ]
+    .iter()
+    .cloned()
+    .collect();
+
+    // Check for unknown fields
+    if let Value::Mapping(map) = serde_yaml::to_value(chain)? {
+        for key in map.keys() {
+            if let Value::String(field_name) = key {
+                if !known_fields.contains(field_name.as_str()) {
+                    return Err(ConfigError::UnknownField(format!(
+                        "Unknown field '{}' in chain config for layer {}",
+                        field_name, layer_number
+                    )));
+                }
+            }
+        }
     }
 
     // validate framework type and config if present
