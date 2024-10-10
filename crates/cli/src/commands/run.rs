@@ -1,5 +1,5 @@
 use clap::Args;
-use monea_handlers::commands::run_handler;
+use monea_periphery::commands::run_handler;
 use std::path::Path;
 
 #[derive(Args, Debug)]

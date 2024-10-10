@@ -1,5 +1,5 @@
 use clap::Args;
-use monea_handlers::commands::init_handler;
+use monea_periphery::commands::init_handler;
 
 #[derive(Args, Debug)]
 pub struct InitArgs {
