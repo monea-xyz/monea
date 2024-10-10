@@ -1,6 +1,6 @@
 use std::{collections::HashMap, error::Error, process::Command};
 
-use monea_manager::{parse_enclave_inspect_stdout, Manager, Service};
+use monea_manager::services::{parse_enclave_inspect_stdout, Manager, Service};
 
 pub fn manager_save_parsed_services(
     chain_services: Vec<(&str, Vec<&str>)>,

@@ -1,12 +1,19 @@
 use monea_functions::{
     manager_save::manager_save_parsed_services, start_l1::start_l1, start_l2::start_l2,
 };
-use monea_utils::{path_helper, project_config::MoneaProjectConfig};
+use monea_manager::project_config::MoneaProjectConfig;
+use monea_utils::path_helper;
 use std::error::Error;
 use std::path::Path;
 
-pub fn run_handler(config_path: Option<&Path>) -> Result<(), Box<dyn Error>> {
-    MoneaProjectConfig::verify(config_path.expect("config_path is None"))?;
+pub fn run_handler(relative_project_path: Option<&str>) -> Result<(), Box<dyn Error>> {
+    let relative_project_path_as_path = relative_project_path
+        .map(Path::new)
+        .unwrap_or_else(|| Path::new(""));
+    MoneaProjectConfig::verify(relative_project_path_as_path)?;
+    let project_config =
+        MoneaProjectConfig::from_file(&relative_project_path_as_path.to_path_buf())?;
+    println!("project_config: {:#?}", project_config);
 
     // hardcoded service names for each chain
     let chain_services_to_parse: Vec<(&str, Vec<&str>)> = vec![

@@ -9,4 +9,5 @@ serde_json = "1.0"
 serde_yaml = "0.9"
 dirs = "5.0"
 regex = "1.10.6"
+thiserror = "1.0"
 monea_utils = { path = "../utils" }

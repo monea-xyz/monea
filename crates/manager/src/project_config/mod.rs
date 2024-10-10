@@ -2,10 +2,12 @@ pub mod chains;
 pub mod frameworks;
 pub mod pipeline;
 pub mod verifier;
+pub mod yaml_file_helper;
 use chains::{ChainConfig, DataAvailabilityConfig, DataAvailabilityTypes, SettlementConfig};
 use frameworks::{FrameworkConfig, FrameworkType};
 use pipeline::PipelineConfig;
 use serde::{Deserialize, Serialize};
+use std::path::PathBuf;
 use std::{fs, io::Write, path::Path};
 use thiserror::Error;
 
@@ -122,7 +124,20 @@ impl MoneaProjectConfig {
         Ok(config)
     }
 
-    pub fn verify(project_config_path: &Path) -> Result<(), ConfigError> {
-        verifier::verify_project_config(project_config_path.to_str().unwrap())
+    pub fn verify(project_path: &Path) -> Result<(), ConfigError> {
+        verifier::verify_project_config(project_path.to_str().unwrap())
+    }
+
+    pub fn from_file(project_path: &PathBuf) -> Result<Self, ConfigError> {
+        let project_config_path = yaml_file_helper::get_project_config_file_path(project_path)?;
+        yaml_file_helper::read_project_config_file_as_struct(&project_config_path)
+    }
+
+    pub fn save(&self, project_config_path: &Path) -> Result<(), ConfigError> {
+        let config_content = serde_yaml::to_string(self).map_err(|e| ConfigError::ParseError(e))?;
+
+        fs::write(project_config_path, config_content).map_err(ConfigError::ReadError)?;
+
+        Ok(())
     }
 }

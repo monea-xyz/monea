@@ -1,31 +1,16 @@
 use serde_yaml;
 use serde_yaml::Value;
-use std::collections::HashSet;
-use std::fs;
-use std::path::Path;
+use std::{collections::HashSet, path::PathBuf};
 
+use super::yaml_file_helper::read_project_config_file_as_string;
 use super::{
-    chains::DataAvailabilityTypes, ChainConfig, ConfigError, FrameworkConfig, FrameworkType,
-    LayerConfig, MoneaProjectConfig,
+    chains::DataAvailabilityTypes, yaml_file_helper::get_project_config_file_path, ChainConfig,
+    ConfigError, FrameworkConfig, FrameworkType, LayerConfig, MoneaProjectConfig,
 };
 
-pub fn verify_project_config(relative_path: &str) -> Result<(), ConfigError> {
-    let config_path;
-
-    let path = Path::new(relative_path);
-    // check for either .yaml or .yml
-    let yaml_path = path.join("monea.config.yaml");
-    let yml_path = path.join("monea.config.yml");
-
-    if yaml_path.exists() {
-        config_path = yaml_path;
-    } else if yml_path.exists() {
-        config_path = yml_path;
-    } else {
-        return Err(ConfigError::NotFound);
-    }
-
-    let config_contents = fs::read_to_string(config_path)?;
+pub fn verify_project_config(relative_project_path: &str) -> Result<(), ConfigError> {
+    let config_contents =
+        read_project_config_file_as_string(&PathBuf::from(relative_project_path))?;
 
     // Parse the YAML as a generic Value to check for unknown fields
     let yaml_value: Value = serde_yaml::from_str(&config_contents)?;

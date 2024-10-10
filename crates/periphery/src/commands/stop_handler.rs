@@ -4,7 +4,7 @@ use std::path::Path;
 use std::process::Command;
 
 // We'll need to import or redefine these types and functions
-use monea_manager::Manager;
+use monea_manager::services::Manager;
 use monea_utils::create_yaml_config::create_temp_yaml_file;
 use monea_utils::path_helper;
 

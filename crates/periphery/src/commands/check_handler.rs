@@ -1,4 +1,4 @@
-use monea_utils::project_config::MoneaProjectConfig;
+use monea_manager::project_config::MoneaProjectConfig;
 use std::path::Path;
 
 pub fn check_handler(config_path: &str) -> Result<(), Box<dyn std::error::Error>> {

@@ -5,10 +5,8 @@ use super::{Chain, Config, Enclave, Service};
 
 const DEFAULT_CHAIN_NAME: &str = "ethereum-l1";
 
-pub fn load_or_create_config() -> Result<Config, Box<dyn Error>> {
-    let config_path = constants::get_config_path();
-
-    println!("Config path: {}", config_path.display());
+pub fn load_or_create_services_config() -> Result<Config, Box<dyn Error>> {
+    let config_path = constants::get_services_config_path();
 
     if !config_path.exists() {
         // Create default manager.yaml config

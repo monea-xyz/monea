@@ -1,4 +1,4 @@
-use monea_utils::project_config::MoneaProjectConfig;
+use monea_manager::project_config::MoneaProjectConfig;
 use std::error::Error;
 use std::fs;
 use std::io::Write;
