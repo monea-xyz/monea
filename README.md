@@ -1,4 +1,4 @@
-# monea-core
+# Monea
 Monea's core user-facing product
 
 ## Development
