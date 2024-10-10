@@ -1,5 +1,5 @@
 use clap::Args;
-use monea_handlers::commands::check_handler;
+use monea_periphery::commands::check_handler;
 
 #[derive(Args, Debug)]
 pub struct CheckArgs {
