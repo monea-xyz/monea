@@ -25,6 +25,7 @@ reqwest = "0.11"
 monea_utils = { path = "../utils" }
 monea_tui = { path = "../tui" }
 monea_periphery = { path = "../periphery" }
+monea_auth.workspace = true
 
 [build-dependencies]
 reqwest = { version = "0.11", features = ["json", "blocking"] }
