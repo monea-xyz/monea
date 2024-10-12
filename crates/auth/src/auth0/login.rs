@@ -132,8 +132,6 @@ pub fn login(client: Auth0Client) -> Result<TokenPollResponse, std::io::Error> {
             )
         })?;
 
-    println!("response: {:?}", response);
-
     match open::that(response.verification_uri_complete.clone()) {
         Ok(_) => {
             println!("\n\nLogin URL opened in your default browser.\n\n");
@@ -155,7 +153,6 @@ pub fn login(client: Auth0Client) -> Result<TokenPollResponse, std::io::Error> {
 
     match activation_polling_loop(client, poll_interval, poll_timeout, device_code) {
         Ok(token_response) => {
-            println!("Token response: {:?}", token_response);
             println!("\n\nYou're logged in!");
             return Ok(token_response);
         }

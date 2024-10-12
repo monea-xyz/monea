@@ -22,9 +22,9 @@ crossterm = "0.28.1"
 ratatui = "0.28.1"
 rpassword = "7.3.1"
 reqwest = "0.11"
-monea_utils = { path = "../utils" }
 monea_tui = { path = "../tui" }
 monea_periphery = { path = "../periphery" }
+monea_utils.workspace = true
 monea_auth.workspace = true
 
 [build-dependencies]

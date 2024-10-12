@@ -43,5 +43,11 @@ pub fn logout() -> Result<(), std::io::Error> {
     let credentials_client = CredentialsStoreClient::new()?;
     credentials_client.set_credentials(UserCredentials::default())?;
 
+    println!("\n\nLogged out!\n\n");
+
     Ok(())
+}
+
+pub fn whoami() -> Result<(), std::io::Error> {
+    unimplemented!()
 }
