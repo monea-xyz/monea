@@ -1,8 +1,7 @@
 mod account;
-mod login;
-mod logout;
 
 use clap::{Args, Subcommand};
+use monea_auth;
 
 #[derive(Args, Debug)]
 pub struct AuthArgs {
@@ -12,17 +11,17 @@ pub struct AuthArgs {
 
 #[derive(Subcommand, Debug)]
 pub enum AuthSubcommands {
-    Login(login::LoginArgs),
+    Login,
     Account(account::AccountArgs),
-    Logout(logout::LogoutArgs),
+    Logout,
 }
 
 pub fn auth(args: AuthArgs) -> Result<(), Box<dyn std::error::Error>> {
     match args.command {
-        AuthSubcommands::Login(login_args) => login::login(login_args).map_err(Into::into),
+        AuthSubcommands::Login => monea_auth::commands::login().map_err(Into::into),
         AuthSubcommands::Account(account_args) => {
             account::account(account_args).map_err(Into::into)
         }
-        AuthSubcommands::Logout(logout_args) => logout::logout(logout_args).map_err(Into::into),
+        AuthSubcommands::Logout => monea_auth::commands::logout().map_err(Into::into),
     }
 }
