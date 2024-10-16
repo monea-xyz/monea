@@ -4,7 +4,7 @@ use std::path::Path;
 use std::process::Command;
 
 // We'll need to import or redefine these types and functions
-use monea_manager::services::Manager;
+use monea_manager::services::Services;
 use monea_utils::create_yaml_config::create_temp_yaml_file;
 use monea_utils::path_helper;
 
@@ -16,8 +16,8 @@ pub fn stop_handler(project_path: Option<String>, layer: String) -> Result<(), B
         return Err("monea.config.yaml not found. Please run 'monea init' first.".into());
     }
 
-    let manager = Manager::new()?;
-    let services = manager
+    let services = Services::new()?;
+    let services = services
         .get_services_by_chain(&layer)
         .ok_or_else(|| format!("Chain '{}' not found", layer))?;
 

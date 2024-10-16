@@ -1,8 +1,10 @@
 use monea_utils::constants;
+use monea_utils::path_helper::get_dot_monea_global_path;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::error::Error;
 use std::fs;
+use std::process::Command;
 
 pub mod parse_enclave_inspect_stdout;
 pub mod services_config;
@@ -38,19 +40,21 @@ pub struct Config {
     pub enclave: Enclave,
 }
 
-pub struct Manager {
+pub struct Services {
     pub config: Config,
 }
 
-impl Manager {
+impl Services {
     pub fn new() -> Result<Self, Box<dyn Error>> {
         let config = services_config::load_or_create_services_config()?;
-        Ok(Manager { config })
+        Ok(Services { config })
     }
 
     pub fn save_config(&self) -> Result<(), Box<dyn Error>> {
         let updated_yaml = serde_yaml::to_string(&self.config)?;
-        fs::write(constants::get_services_config_path(), updated_yaml)?;
+        let mut config_path = get_dot_monea_global_path();
+        config_path.push("services.yaml");
+        fs::write(config_path, updated_yaml)?;
         Ok(())
     }
 
@@ -101,6 +105,53 @@ impl Manager {
             // If the service doesn't exist, add it to the chain's services
             chain.services.push(new_service.clone());
         }
+
+        Ok(())
+    }
+
+    pub fn parse_and_save_services_config(
+        &mut self,
+        chain_services: Vec<(&str, Vec<&str>)>,
+    ) -> Result<(), Box<dyn Error>> {
+        // Now, let's inspect the enclave and parse the output
+        let output = Command::new("kurtosis")
+            .arg("enclave")
+            .arg("inspect")
+            .arg("monea-enclave")
+            .output()?;
+
+        if !output.status.success() {
+            return Err("Kurtosis enclave inspect command failed".into());
+        }
+
+        let stdout = String::from_utf8(output.stdout)?;
+        let parsed_services = parse_enclave_inspect_stdout::parse(&stdout)?;
+
+        // Create a HashMap to easily look up parsed services by name
+        let parsed_services_map: HashMap<String, Service> = parsed_services
+            .into_iter()
+            .map(|service| (service.name.clone(), service))
+            .collect();
+
+        // Iterate over the hardcoded chain_services
+        for (chain_name, service_names) in chain_services {
+            for service_name in service_names {
+                match parsed_services_map.get(service_name) {
+                    Some(parsed_service) => {
+                        self.add_or_update_service(chain_name, parsed_service.clone())?;
+                    }
+                    None => {
+                        println!(
+                            "Warning: Service '{}' wasn't found in parsed stdout",
+                            service_name
+                        );
+                    }
+                }
+            }
+        }
+
+        // Save the updated configuration
+        self.save_config()?;
 
         Ok(())
     }

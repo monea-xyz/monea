@@ -1,7 +1,6 @@
-use monea_functions::{
-    manager_save::manager_save_parsed_services, start_l1::start_l1, start_l2::start_l2,
-};
+use monea_functions::{start_l1::start_l1, start_l2::start_l2};
 use monea_manager::project_config::MoneaProjectConfig;
+use monea_manager::MoneaManager;
 use monea_utils::path_helper;
 use std::error::Error;
 use std::path::Path;
@@ -10,12 +9,16 @@ pub fn run_handler(relative_project_path: Option<&str>) -> Result<(), Box<dyn Er
     let relative_project_path_as_path = relative_project_path
         .map(Path::new)
         .unwrap_or_else(|| Path::new(""));
-    MoneaProjectConfig::verify(relative_project_path_as_path)?;
-    let project_config =
-        MoneaProjectConfig::from_file(&relative_project_path_as_path.to_path_buf())?;
+
+    let mut manager =
+        MoneaManager::with_project(&relative_project_path_as_path.to_path_buf(), true)?;
+
+    let project_config = manager.project_config().unwrap();
+
     println!("project_config: {:#?}", project_config);
 
     // hardcoded service names for each chain
+    // TODO
     let chain_services_to_parse: Vec<(&str, Vec<&str>)> = vec![
         (
             "ethereum-l1",
@@ -46,12 +49,14 @@ pub fn run_handler(relative_project_path: Option<&str>) -> Result<(), Box<dyn Er
     }
 
     // start the l2 network
-    let l2_result = start_l2(&kurtosis_package_path);
-    if let Err(e) = l2_result {
-        return Err(e);
-    }
+    // let l2_result = start_l2(&kurtosis_package_path);
+    // if let Err(e) = l2_result {
+    //     return Err(e);
+    // }
 
-    manager_save_parsed_services(chain_services_to_parse)?;
+    manager
+        .services
+        .parse_and_save_services_config(chain_services_to_parse)?;
 
     println!("Configuration updated successfully.");
 

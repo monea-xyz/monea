@@ -74,7 +74,7 @@ impl MoneaProjectConfig {
                 pipeline: None,
                 chains: vec![ChainConfig {
                     name: "ethereum-l1".to_string(),
-                    chain_id: 1,
+                    chain_id: 3151908,
                     block_time: Some(12),
                     framework_type: None,
                     framework_config: None,

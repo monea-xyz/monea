@@ -1,4 +1,4 @@
-use monea_utils::constants;
+use monea_utils::path_helper::get_dot_monea_global_path;
 use std::{collections::HashMap, error::Error, fs};
 
 use super::{Chain, Config, Enclave, Service};
@@ -6,10 +6,11 @@ use super::{Chain, Config, Enclave, Service};
 const DEFAULT_CHAIN_NAME: &str = "ethereum-l1";
 
 pub fn load_or_create_services_config() -> Result<Config, Box<dyn Error>> {
-    let config_path = constants::get_services_config_path();
+    let mut config_path = get_dot_monea_global_path();
+    config_path.push("services.yaml");
 
     if !config_path.exists() {
-        // Create default manager.yaml config
+        // Create default services.yaml config
         let default_manager_config = Config {
             enclave: Enclave {
                 id: String::from("monea-enclave"),
